@@ -14,8 +14,6 @@ jobs:
           password: $DOCKERHUB_PASSWORD # context / project UI env-var reference
     steps:
       - checkout
-      - run: 
+      - run:
           name: Install Dependencies
-          command: | 
-          echo 'export PATH=~$PATH:~/.local/bin' >> $BASH_ENV && source $BASH_ENV
-          pip3 install -r requirements.txt
+          command: pip3 install -r requirements.txt
