@@ -11,3 +11,7 @@ def hello_world():
 @app.route('/hi')
 def hi():
     return "Good Morning!"
+
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0')
