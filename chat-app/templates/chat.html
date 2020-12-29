@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<script type="text/javascript">
+    const username = {{ username | tojson }}
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.1/socket.io.min.js"></script>
+<script type="text/javascript" src="../static/chat.js"></script>
+
+<head>
+    <title>Flask_Chat_App</title>
+
+</head>
+
+
+<body>
+    <h4>Currently Active Users</h4>
+    <ul id="activeUsers">
+
+    </ul>
+
+    <form id="messageForm" onsubmit="onMessageSubmit(event)">
+        <label for="message">{{ username| tojson }} Message</label><br />
+        <input id="message" />
+        <input type="submit" name="continue">send</input>
+
+    </form>
+</body>
+
+
+</html>
