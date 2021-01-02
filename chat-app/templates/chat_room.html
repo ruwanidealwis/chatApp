@@ -13,17 +13,19 @@
 
 
 <body>
-    <h4>Currently Active Users</h4>
-    <ul id="activeUsers">
-    </ul>
+    <div>
+        <h2>Chat</h2>
 
-    <div id="chat-messages"></div>
-    <form id="messageForm" onsubmit="onMessageSubmit(event)">
-        <label for="message">{{ username| tojson }} Message</label><br />
-        <input id="message" />
-        <input type="submit" name="continue">send</input>
+        <div id="chatMessages">
+        </div>
+        <form id="messageForm" onsubmit="onMessageSubmit(event)">
+            <label for="message">Message</label><br />
+            <input id="message" />
+            <input type="submit" name="continue" />send
 
-    </form>
+        </form>
+
+    </div>
 
 
 </body>
