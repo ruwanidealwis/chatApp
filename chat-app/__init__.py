@@ -7,7 +7,12 @@ socketio = SocketIO(app)
 
 
 @app.route('/', methods=['POST', 'GET'])
-def hello_world():
+def entry():
+    """entry point for flask application
+
+    Returns:
+        [html]: returns the main HTML template if GET, redirects to /chat if POST
+    """
     if request.method == 'POST':
         jsonData = request.json
         print(jsonData)
@@ -18,39 +23,55 @@ def hello_world():
         return render_template('main.html')
 
 
-@ app.route('/chat/<room_id>')
-def load_room(room_id=0):
-    print(room_id)
-    # get messages from db
-    return render_template('chat_room.html',  username="x")
-
-
 @ app.route('/chat', methods=["GET"])
 def chat():
+    """  the chat view after the user logs in
+    Args:
+        methods (list, optional): [Type of HTTP request]. Defaults to ['GET', 'POST'].
+    Returns:
+        [HTML template]: [load chat view]
+    """
     return render_template('chat.html', username=request.args.get('username'))
 
 
 @ socketio.on('connected')
-def connected_users(json, methods=['GET', 'POST']):
-    username_dict[json["socketID"]] = json["username"]
-    print('received a new user: ' + str(json))
-    socketio.emit('new active user', json)
+def connected_users(data, methods=['GET', 'POST']):
+    """[when a new user connects to a client]
+
+    Args:
+        data ([json]): information about the new user (ie: username)
+        methods (list, optional): HTTP methods. Defaults to ['GET', 'POST'].
+    """
+    username_dict[data["socketID"]] = data["username"]
+    print('received a new user: ' + str(data))
+    socketio.emit('new active user', data)
 
 
 @ socketio.on('message')
-def handle_my_custom_event(json, methods=['GET', 'POST']):
+def handle_my_custom_event(data, methods=['GET', 'POST']):
+    """ when server recieves a message event
+
+    Args:
+        data ([jaon]): information about message, (message, room name)
+        methods (list, optional):  HTTP methods.. Defaults to ['GET', 'POST'].
+    """
     # TODO save messages to database
-    print('received my message: ' + str(json))
-    if json["roomName"]:
-        route = '/chat/' + json["roomName"]
-        socketio.emit('my response', json,
-                      room=json["roomName"])
+    print('received my message: ' + str(data))
+    if data["roomName"]:
+        route = '/chat/' + data["roomName"]
+        socketio.emit('my response', data,
+                      room=data["roomName"])
     else:
         socketio.emit('my response', json)
 
 
 @socketio.on('join room')
 def join_new_room(data):
+    """joins a chat room (ie: private messaging groups)
+
+    Args:
+        data (json): information about the room (ie: room name, user)
+    """
     join_room(data["roomName"])
     print(data)
     route = '/chat/' + data["roomName"]
@@ -64,6 +85,11 @@ def join_new_room(data):
 
 @socketio.on('send invite')
 def send_invite(data):
+    """sends an invite event to invite a user to room
+
+    Args:
+        data (json ): information related to the invite (ie: room name, user ID)
+    """
     print(data)
     data["username"] = username_dict[data["userID"]]
     # send an invite to guest...
