@@ -22,4 +22,4 @@ jobs:
           command: pip3 install pytest
       - run:
           name: Run Tests and Log
-          command: pytest -v > chat_app/tests/testResults.log
+          command: pytest -v
