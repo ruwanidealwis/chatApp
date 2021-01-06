@@ -18,5 +18,8 @@ jobs:
           name: Install Dependencies
           command: pip3 install -r requirements.txt
       - run:
+          name: Install pytest
+          command: pip3 install pytest
+      - run:
           name: Run Tests and Log
           command: pytest -v > chat_app/tests/testResults.log
