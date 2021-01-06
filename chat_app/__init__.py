@@ -57,12 +57,15 @@ def handle_my_custom_event(data, methods=['GET', 'POST']):
     """
     # TODO save messages to database
     print('received my message: ' + str(data))
-    if data["roomName"]:
+
+    if "roomName" in data:
         route = '/chat/' + data["roomName"]
         socketio.emit('my response', data,
                       room=data["roomName"])
+
     else:
-        socketio.emit('my response', json)
+
+        socketio.emit('my response', data)
 
 
 @socketio.on('join room')
@@ -88,7 +91,7 @@ def send_invite(data):
     """sends an invite event to invite a user to room
 
     Args:
-        data (json ): information related to the invite (ie: room name, user ID)
+        data (json): information related to the invite (ie: room name, user ID)
     """
     print(data)
     data["username"] = username_dict[data["userID"]]
